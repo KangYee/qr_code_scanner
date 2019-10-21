@@ -23,14 +23,17 @@ public class QRView:NSObject,FlutterPlatformView {
     func isCameraAvailable(success: Bool) -> Void {
         if success {
             do {
-                try scanner?.startScanning(resultBlock: { codes in
-                    if let codes = codes {
-                        for code in codes {
-                            let stringValue = code.stringValue!
-                            self.channel.invokeMethod("onRecognizeQR", arguments: stringValue)
+                try scanner?.startScanning(
+                    with: .back,
+                    resultBlock: { codes in
+                        if let codes = codes {
+                            for code in codes {
+                                let stringValue = code.stringValue!
+                                self.channel.invokeMethod("onRecognizeQR", arguments: stringValue)
+                            }
                         }
                     }
-                })
+                )
             } catch {
                 NSLog("Unable to start scanning")
             }
